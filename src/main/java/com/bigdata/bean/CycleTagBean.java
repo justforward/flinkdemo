@@ -1,5 +1,7 @@
 package com.bigdata.bean;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 import java.util.List;
@@ -20,4 +22,7 @@ public class CycleTagBean {
     private String tagName;
     private Integer tagType;
     private Integer eventType;
+
+    //为了序列化，存放序列化信息
+    private JSONObject content;
 }

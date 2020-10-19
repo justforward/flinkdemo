@@ -13,7 +13,7 @@ import java.util.Properties;
  * @Auther wangtan
  * @Date 2020/10/16
  */
-public class KafkaStringInputDemo {
+class KafkaStringInputDemo {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);

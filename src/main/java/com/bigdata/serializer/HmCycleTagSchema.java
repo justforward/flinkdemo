@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * @Auther wangtan
  * @Date 2020/10/16
+ * 反序列化：将字节流（json）转成对象
  */
 public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
     @Override
@@ -41,6 +42,7 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
             cycleTag.setTagName(json.getString("tagName"));
             cycleTag.setTagType(json.getInteger("tagType"));
             cycleTag.setEventType(json.getInteger("eventType"));
+            cycleTag.setContent(json);
             return cycleTag;
         }
         return null;
