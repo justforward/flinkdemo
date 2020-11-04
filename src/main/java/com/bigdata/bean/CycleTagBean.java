@@ -23,6 +23,6 @@ public class CycleTagBean {
     private Integer tagType;
     private Integer eventType;
 
-    //为了序列化，存放序列化信息
+    //为了序列化，存放序列化信息 将整个对象输出使用
     private JSONObject content;
 }

@@ -3,20 +3,19 @@ package com.bigdata.inandout;
 import com.bigdata.bean.CycleTagBean;
 import com.bigdata.serializer.HmCycleTagSchema;
 import com.bigdata.serializer.HmCycleTagSink;
-import lombok.val;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer010;
+import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
 import java.util.Properties;
 
 /**
  * @Auther wangtan
- * @Date 2020/10/16
+ * @Date 2020/10/19
  */
-public class KafkaJsonDemo {
+public class KafkaJsonDemo2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env=StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -37,11 +36,28 @@ public class KafkaJsonDemo {
         stream.print();
         Properties out=new Properties();
         out.setProperty("bootstrap.servers", "localhost:9092");
-        //2。输出数据到一个topic里面
-        //参数：1）topic 2）指定序列化的输出 3）指定kafka的配置信息 必须包含kafka的borken信息
-        FlinkKafkaProducer010 hmOrderWithCycle = new FlinkKafkaProducer010("consumerTest",
+        //2。输出数据到多个topic里面
+       FlinkKafkaProducer010 hmOrderWithCycle = new FlinkKafkaProducer010("consumerTest",
                 new HmCycleTagSink(), properties);
         stream.addSink(hmOrderWithCycle);
         env.execute("kafka Json input");
     }
+    class MyKeyedSerialization implements KeyedSerializationSchema<CycleTagBean> {
+
+        @Override
+        public byte[] serializeKey(CycleTagBean cycleTagBean) {
+            return new byte[0];
+        }
+
+        @Override
+        public byte[] serializeValue(CycleTagBean cycleTagBean) {
+            return new byte[0];
+        }
+
+        @Override
+        public String getTargetTopic(CycleTagBean cycleTagBean) {
+            return null;
+        }
+    }
+
 }
