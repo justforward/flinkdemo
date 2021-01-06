@@ -18,6 +18,10 @@ import java.util.List;
  */
 public class ThresholdWarning extends RichFlatMapFunction<Tuple2<String, Long>, Tuple2<String, List<Long>>> {
     //通过ListState来存储非正常数据的状态
+    /**
+     * ListState：存储列表类型的状态。
+     * 可以使用 add(T) 或 addAll(List) 添加元素；并通过 get() 获得整个列表。
+     */
     private transient ListState<Long> abnormalData;
     //需要监控的阈值
     private Long threshold;
@@ -28,7 +32,6 @@ public class ThresholdWarning extends RichFlatMapFunction<Tuple2<String, Long>, 
         this.threshold=threshold;
         this.numberOfTimes=numberOfTimes;
     }
-
     @Override
     public void open(Configuration parameters) throws Exception {
         //通过状态名称（句柄）获取状态实例，如果不存在则会自动创建

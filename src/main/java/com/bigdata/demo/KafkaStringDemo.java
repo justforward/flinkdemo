@@ -1,4 +1,4 @@
-package com.bigdata.inandout;
+package com.bigdata.demo;
 
 
 import lombok.val;

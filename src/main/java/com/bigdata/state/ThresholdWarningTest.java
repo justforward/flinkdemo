@@ -23,7 +23,5 @@ public class ThresholdWarningTest {
                 .flatMap(new ThresholdWarning(100L, 3L))  // 超过100的阈值3次后就进行报警
                 .printToErr();
         env.execute("Managed Keyed State");
-
-
     }
 }
