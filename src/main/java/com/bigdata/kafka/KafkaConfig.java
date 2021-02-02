@@ -41,5 +41,12 @@ public class KafkaConfig {
         return kafkaProperties;
     }
 
+    public static Properties outConfig(){
+        Properties out=new Properties();
+        out.setProperty("bootstrap.servers", "localhost:9092");
+        return out;
+    }
+
+
 }
 
