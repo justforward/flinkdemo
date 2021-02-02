@@ -1,6 +1,7 @@
 package com.bigdata.demo;
 
 import com.bigdata.bean.CycleTagBean;
+import com.bigdata.kafka.KafkaConfig;
 import com.bigdata.serializer.HmCycleTagSchema;
 import com.bigdata.serializer.HmCycleTagSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -19,13 +20,8 @@ public class KafkaJsonDemo2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env=StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
-        //1。 输入数据
-        Properties properties=new Properties();
-        //这两个的properties是必须传递的
-        //以逗号分隔的 Kafka broker 即：消息中间件存在的某个服务器，可能为多个服务器
-        properties.setProperty("bootstrap.servers", "localhost:9092");
-        //消费组 ID(自定义名称，不与其他的消费组同名即可)
-        properties.setProperty("group.id", "consumer01");
+       //1.输入
+        Properties properties = KafkaConfig.sourceConfig();
         //参数：1）topic
         //      2）序列化的类
         //     3）配置kafka的信息
