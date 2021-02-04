@@ -26,9 +26,8 @@ public class KafkaInputStringToBean {
                 .addSource(new FlinkKafkaConsumer010<>("test",
                         new SimpleStringSchema(),
                         properties));
-        stream.map(new MessageTans());
+        stream.map(new MessageTans()).print();
 
-        stream.print();
-        env.execute("mm");
+        env.execute("String to bean Job!");
     }
 }
