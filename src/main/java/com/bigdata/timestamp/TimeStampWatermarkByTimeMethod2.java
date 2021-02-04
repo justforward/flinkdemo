@@ -60,13 +60,13 @@ public class TimeStampWatermarkByTimeMethod2 {
             @Override
             public long extractTimestamp(String element, long previousElementTimestamp) {
                 String[] split=element.split("\t");
-                Long eventTime=Long.valueOf(split[0]);
+                long eventTime=Long.valueOf(split[0]);
                 //watermark 比eventTime晚1s
                 watermarkTime=eventTime-1000;
                 return eventTime;
             }
         });
-        env.execute();
+        env.execute("get event Time and watermark by use time");
 
     }
 }
