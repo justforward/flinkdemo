@@ -75,9 +75,14 @@ public class TimeStampLaterData6 {
                                 ".currentTime" + System.currentTimeMillis());
                         elements.forEach(v -> {
                             System.out.println("windows-->" + v);
+                            //正常的数据，发送出去
+                            out.collect("on time:"+v);
                         });
+
                     }
                 });
+        //处理准时的数据
+        process.print();
         DataStream<String> lateOutPut = process.getSideOutput(late);
         lateOutPut.map(new MapFunction<String, String>() {
 
