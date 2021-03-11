@@ -9,13 +9,17 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.TimerService;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import org.apache.flink.util.Collector;
 
@@ -83,7 +87,6 @@ public class FirstDemo {
 
         //richFunction的使用
         SingleOutputStreamOperator<Tuple2<String, Integer>> tuple2SingleOutputStreamOperator = localhost.flatMap(new RichFlatMapFunction<String, Tuple2<String, Integer>>() {
-
             private String name = null;
 
             //初始化（初始参数）的时候执行一次
@@ -112,13 +115,51 @@ public class FirstDemo {
             }
         });
 
-        KeyedStream<Tuple2<String, Integer>, String> tuple2StringKeyedStream = tuple2SingleOutputStreamOperator.keyBy(new KeySelector<Tuple2<String, Integer>, String>() {
+        tuple2SingleOutputStreamOperator.keyBy(new KeySelector<Tuple2<String, Integer>, String>() {
             @Override
             public String getKey(Tuple2<String, Integer> stringIntegerTuple2) throws Exception {
                 //根据第一个元素进行分组
                 return stringIntegerTuple2.f0;
             }
-        });
+        }).sum(1).print();
+
+        //process函数的使用
+        localhost.process(new ProcessFunction<String, Tuple2<String,Integer>>() {
+            //到点回调，相当于窗口。flink的窗口可以使用底层Api自己实现
+            @Override
+            public void onTimer(long timestamp, OnTimerContext ctx, Collector<Tuple2<String, Integer>> out) throws Exception {
+                super.onTimer(timestamp, ctx, out);
+            }
+            /**
+             * @param value in 输入的值
+             * @param ctx  程序的上下文
+             * @param out   输出
+             * @throws Exception
+             */
+            @Override
+            public void processElement(String value, Context ctx, Collector<Tuple2<String, Integer>> out) throws Exception {
+                //上下文获得time的服务，3秒钟之后触发onTimer方法
+                //类似实现窗口方法
+                ctx.timerService().registerEventTimeTimer(3000);
+                String[] s = value.split(" ");
+                for(String ss:s){
+                    out.collect(Tuple2.of(ss,1));
+                }
+            }
+        }).keyBy(0).process(new KeyedProcessFunction<Tuple, Tuple2<String, Integer>, Tuple2<String,Integer>>() {
+            private Integer num=0;
+            @Override
+            public void processElement(Tuple2<String, Integer> value, Context ctx, Collector<Tuple2<String, Integer>> out) throws Exception {
+                Tuple currentKey = ctx.getCurrentKey();
+                System.out.println("当前的key："+ currentKey);
+                num+=value.f1;
+                    out.collect(Tuple2.of(value.f0,num));
+            }
+
+        }).print();
+        //
+
+
 
 
         env.execute("flatMap");
