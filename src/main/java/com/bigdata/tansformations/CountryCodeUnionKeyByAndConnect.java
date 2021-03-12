@@ -22,6 +22,8 @@ import java.util.Properties;
 /**
  * @author wangtan
  * @Date 2021/3/12
+ * 通过keyBy之后，两个流中相同key会被分配到同一个分区上。
+ * 然后在同一个分区上进行计算
  */
 public class CountryCodeUnionKeyByAndConnect {
     public static void main(String[] args) throws Exception {
