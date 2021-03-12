@@ -48,11 +48,20 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
         return null;
     }
 
+    /**
+     * 是否结束
+     * @param cycleTag
+     * @return
+     */
     @Override
     public boolean isEndOfStream(CycleTagBean cycleTag) {
         return false;
     }
 
+    /**
+     * 指定这次处理的类型
+     * @return
+     */
     @Override
     public TypeInformation<CycleTagBean> getProducedType() {
         return TypeInformation.of(CycleTagBean.class);

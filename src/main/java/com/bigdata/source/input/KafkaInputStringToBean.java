@@ -18,7 +18,7 @@ public class KafkaInputStringToBean {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        val properties=new Properties();
+        Properties properties = new Properties();
         //这两个的properties是必须传递的
         properties.setProperty("bootstrap.servers", "localhost:9092");
         properties.setProperty("group.id", "consumer01");

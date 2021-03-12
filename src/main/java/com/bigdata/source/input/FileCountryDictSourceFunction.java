@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 public class FileCountryDictSourceFunction implements SourceFunction<String> {
 
     private Boolean isCancel = true;
-
     private Integer interval=10000;
 
     /**
