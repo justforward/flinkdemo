@@ -2,6 +2,7 @@ package com.bigdata.bean;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Objects;
 import lombok.Data;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public class CycleTagBean {
 
     //为了序列化，存放序列化信息 将整个对象输出使用
     private JSONObject content;
+
+
 }

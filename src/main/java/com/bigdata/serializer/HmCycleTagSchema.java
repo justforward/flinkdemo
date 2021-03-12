@@ -21,8 +21,8 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
     public CycleTagBean deserialize(byte[] message) throws IOException {
         String body = new String(message, "UTF-8");
         JSONObject json = JSON.parseObject(body);
-        if(json!=null){
-            CycleTagBean cycleTag=new CycleTagBean();
+        if (json != null) {
+            CycleTagBean cycleTag = new CycleTagBean();
             cycleTag.setBizType(json.getInteger("bizType"));
             cycleTag.setCityId(json.getInteger("cityId"));
             cycleTag.setVehicleId(json.getLong("vehicleId"));
@@ -30,9 +30,9 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
             cycleTag.setOpStatus(json.getInteger("opStatus"));
 
             JSONArray allTagIds = json.getJSONArray("allTagIds");
-            if(allTagIds!=null&&!allTagIds.isEmpty()){
-                List<Integer> allTagIdList=new ArrayList<>();
-                for(Object obj:allTagIds){
+            if (allTagIds != null && !allTagIds.isEmpty()) {
+                List<Integer> allTagIdList = new ArrayList<>();
+                for (Object obj : allTagIds) {
                     Integer tag = (Integer) obj;
                     allTagIdList.add(tag);
                 }
@@ -50,6 +50,7 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
 
     /**
      * 是否结束
+     *
      * @param cycleTag
      * @return
      */
@@ -60,6 +61,7 @@ public class HmCycleTagSchema implements DeserializationSchema<CycleTagBean> {
 
     /**
      * 指定这次处理的类型
+     *
      * @return
      */
     @Override
