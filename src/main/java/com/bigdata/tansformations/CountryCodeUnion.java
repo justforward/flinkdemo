@@ -21,6 +21,10 @@ import java.util.Properties;
  *  1)不能并行：如果并行度大于kafka的partition的时候，这意味着有的槽无法读到kafka数据
  *      那么如果由这个槽执行任务，会导致任务失败。应该命中的，但是结果没有命中成功。
  *  2）耦合问题：不方便区分数据流从哪来。
+ *  source读取的一条数据信息格式如下：
+ *  1）从文件流中读取的一条数据形式为：AR 阿根廷 Argentina
+ *  2）从kafka中读取的一条数据形式为：AR
+ *
  */
 public class CountryCodeUnion {
     public static void main(String[] args) throws Exception {
