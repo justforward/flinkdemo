@@ -55,11 +55,23 @@ public class TumblingWindowWatermarkWordCount {
             private Long currentMaxTimestamp = 0L;
             /*最大允许的消息延迟是5秒*/
             private final Long maxOutOfOrderness = 5000L;
+
+            /**
+             * 设置Watermark
+             * @return
+             */
             @Nullable
             @Override
             public Watermark getCurrentWatermark() {
                 return new Watermark(currentMaxTimestamp - maxOutOfOrderness);
             }
+
+            /**
+             * 得到当前最大的时间戳
+             * @param element
+             * @param previousElementTimestamp
+             * @return
+             */
             @Override
             public long extractTimestamp(Tuple3<Long, String, Integer> element, long previousElementTimestamp) {
                 long timestamp = element.f0;

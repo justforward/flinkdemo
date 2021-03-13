@@ -13,10 +13,12 @@ import javax.annotation.Nullable;
 /**
  * @author wangtan
  * @Date 2021/2/4
+ * 自定义类Periodic Watermark实现Watermark和Timestamp
  */
 public class TimeStampWatermarkByTimeMethod2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env=StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        //步骤1：设置eventTime
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         DataStreamSource<String> stringDataStreamSource = env.addSource(new SourceFunction<String>() {
@@ -38,6 +40,8 @@ public class TimeStampWatermarkByTimeMethod2 {
             }
         });
         stringDataStreamSource.print();
+
+        //设置Watermark和timeStamp
         stringDataStreamSource.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks<String>() {
             private Long watermarkTime;
 
